@@ -84,8 +84,8 @@ class ResidualAttentionBlock(nn.Module):
 
 
     def forward(self, x):
-        x += self.mha(self.ln1(x))
-        x += self.mlp(self.ln2(x))  # Attention is all U need의 transformer와 순서가 약간 다름
+        x = x + self.attention(self.ln1(x))
+        x = x + self.mlp(self.ln2(x))  # Attention is all U need의 transformer와 순서가 약간 다름
         return x
 
 
@@ -94,11 +94,13 @@ class TextTransformer(nn.Module):
     def __init__(self, embed_dim, n_head, layers: int, attn_mask: torch.Tensor = None):
         super().__init__()
         self.embed_dim = embed_dim
+        self.width = embed_dim
         self.n_head = n_head
-        self.layer = nn.Sequential(*[ResidualAttentionBlock(embed_dim=embed_dim, n_head=n_head, attn_mask=attn_mask) for _ in range(layers)])
+        self.layers = layers
+        self.resblocks = nn.Sequential(*[ResidualAttentionBlock(embed_dim=embed_dim, n_head=n_head, attn_mask=attn_mask) for _ in range(layers)])
 
-    def foward(self, x):
-        return self.layer(x)
+    def forward(self, x):
+        return self.resblocks(x)
     
 #####################  text encoder end  ########################
 
@@ -148,7 +150,7 @@ class Bottleneck(nn.Module):
         if self.downsample is not None:
             identity = self.downsample(x)
 
-        out += identity
+        out = out + identity
         out = self.relu3(out)
         return out
 
@@ -329,10 +331,10 @@ class CLIP(nn.Module):
         attn_std = self.transformer.width ** -0.5
         fc_std = (2 * self.transformer.width) ** -0.5
         for block in self.transformer.resblocks:
-            nn.init.normal_(block.attn.in_proj_weight, std=attn_std)
-            nn.init.normal_(block.attn.out_proj.weight, std=proj_std)
-            nn.init.normal_(block.mlp.c_fc.weight, std=fc_std)
-            nn.init.normal_(block.mlp.c_proj.weight, std=proj_std)
+            nn.init.normal_(block.mha.in_proj_weight, std=attn_std)
+            nn.init.normal_(block.mha.out_proj.weight, std=proj_std)
+            nn.init.normal_(block.mlp[0].weight, std=fc_std)
+            nn.init.normal_(block.mlp[2].weight, std=proj_std)
 
         if self.text_projection is not None:
             nn.init.normal_(self.text_projection, std=self.transformer.width ** -0.5)

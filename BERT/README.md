@@ -11,8 +11,8 @@ transformers Library의 BERT를 활용하여 model 작동 방식 탐색 및 fine
 
 BERT pretrain을 불러온 뒤 model의 구성 요소 및 config를 확인한다. \
 tokenizer의 작동 방식을 파악한다. \
-model의 output이 정확히 어떤 것을 의미하는지 살펴본다. \ 
-IMDb dataset의 구조를 파악하고 전처리를 진행한다. \ 
+model의 output이 정확히 어떤 것을 의미하는지 살펴본다. \
+IMDb dataset의 구조를 파악하고 전처리를 진행한다. \
 trainer를 활용해 model 전체를 학습시킨다. \
 pytorch만을 활용하여 BERT 뒤에 linear layer를 연결한 후 이 layer만 학습시킨다. 
 

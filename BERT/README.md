@@ -20,3 +20,7 @@ pytorch만을 활용하여 BERT 뒤에 linear layer를 연결한 후 이 layer�
 ## 실행 환경
 ipynb 파일 Colab에서 실행. \
 다른 라이브러리 설치나 파일 필요 없음.
+
+## TODO
+
+CLIP처럼 BERT pytorch from scratch로 구현.

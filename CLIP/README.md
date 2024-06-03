@@ -1,6 +1,6 @@
 # CLIP 구현 및 training
 
-transformers Library의 BERT를 활용하여 model 작동 방식 탐색 및 fine-tuning 예제
+pytorch로 CLIP 구현 및 [MS-COCO 2017](https://cocodataset.org/#download) captions 활용하여 CLIP training
 
 ## 출처
 

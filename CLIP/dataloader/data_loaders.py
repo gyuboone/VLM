@@ -5,10 +5,10 @@ def get_dataloader(dataset, batch_size, is_train = True):
     
     if is_train:
         sampler = RandomSampler(dataset)
-        batch_size = batch_size * torch.cuda.device_count()
+        batch_size = batch_size
     else:
         sampler = SequentialSampler(dataset)
-        batch_size = 2*batch_size * torch.cuda.device_count()
+        batch_size = 2*batch_size
 
     dataloader = DataLoader(dataset, sampler=sampler, 
             batch_size=batch_size, num_workers=4)
